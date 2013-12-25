@@ -1,5 +1,8 @@
 package com.guc.dear_diary;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,180 +18,104 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class Videos extends Activity {
-
+	ArrayAdapter<String> adapter;
 	// set constants for MediaStore to query, and show videos
-	static String location = "/Dear Diary/Camera/";
-	static String urri = "content:/"+Environment.getExternalStorageDirectory().getPath()+location;
-	private final static Uri MEDIA_EXTERNAL_CONTENT_URI = Uri.parse(urri);
-	private final static String _ID = MediaStore.Video.Media._ID;
-	private final static String MEDIA_DATA = MediaStore.Video.Media.DATA;
-	// flag for which one is used for images selection
-	private GridView _gallery;
-	private Cursor _cursor;
-	private int _columnIndex;
-	private int[] _videosId;
-	private Uri _contentUri;
-	String filename;
-	int flag = 0;
-
+	Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
+		    + "/DearDiary/Camera/");
+	File folder =new File(uri.toString());
+	File[] listOfFiles=folder.listFiles();
+	ArrayList <String> namesOfFiles=new ArrayList<String>();
 	protected Context _context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		String location = "/Dear Diary/Camera/";
-		Log.e("Neshoooof",Environment.getExternalStorageDirectory().getPath()+location);
-		String urri = "content:/"+Environment.getExternalStorageDirectory().getPath()+location;
-		Log.e("Neshooof",MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString());
+		
+	//	this.openFolder();
+		System.out.println("uri is "+uri);
+		System.out.println("number of files in the folder "+listOfFiles.length);
 		
 		super.onCreate(savedInstanceState);
-		_context = getApplicationContext();
+		
 		setContentView(R.layout.activity_videos);
-		_gallery = (GridView) findViewById(R.id.videoGrdVw);
-		// set default as external/sdcard uri
-		_contentUri = MEDIA_EXTERNAL_CONTENT_URI;
-
-		initVideosId();
-
-		// set gallery adapter
-		setGalleryAdapter();
-	}
-
-	private void setGalleryAdapter() {
-		_gallery.setAdapter(new VideoGalleryAdapter(_context));
-		_gallery.setOnItemClickListener(_itemClickLis);
-		flag = 1;
-	}
-
-	private OnItemClickListener _itemClickLis = new OnItemClickListener() {
-		@SuppressWarnings({ "deprecation", "unused", "rawtypes" })
-		public void onItemClick(AdapterView parent, View v, int position,
-				long id) {
-			// Now we want to actually get the data location of the file
-			String[] proj = { MEDIA_DATA };
-			// We request our cursor again
-			_cursor = managedQuery(_contentUri, proj, // Which columns to return
-					MEDIA_DATA + " like ? ", // WHERE clause; which rows to
-												// return (all rows)
-					new String[] { "%Movies%" }, // WHERE clause selection
-													// arguments (none)
-					null); // Order-by clause (ascending by name)
-			// We want to get the column index for the data uri
-			int count = _cursor.getCount();
-			//
-			_cursor.moveToFirst();
-			//
-			_columnIndex = _cursor.getColumnIndex(MEDIA_DATA);
-			// Lets move to the selected item in the cursor
-			_cursor.moveToPosition(position);
-			// And here we get the filename
-			filename = _cursor.getString(_columnIndex);
-			// *********** You can do anything when you know the file path :-)
-			showToast(filename);
-
-			Intent i = new Intent(Videos.this, MainActivity.class);
-			i.putExtra("videoPath", filename);
-			startActivity(i);
-
-			//
-		}
-	};
-
-	@SuppressWarnings("deprecation")
-	private void initVideosId() {
-		try {
-			// Here we set up a string array of the thumbnail ID column we want
-			// to get back
-			String[] proj = { _ID };
-			// Now we create the cursor pointing to the external thumbnail store
-			_cursor = managedQuery(_contentUri, proj, // Which columns to return
-					MEDIA_DATA + " like ? ", // WHERE clause; which rows to
-												// return (all rows)
-					new String[] { "%Movies%" }, // WHERE clause selection
-													// arguments (none)
-					null); // Order-by clause (ascending by name)
-			int count = _cursor.getCount();
-			// We now get the column index of the thumbnail id
-			_columnIndex = _cursor.getColumnIndex(_ID);
-			// initialize
-			_videosId = new int[count];
-			// move position to first element
-			_cursor.moveToFirst();
-			for (int i = 0; i < count; i++) {
-				int id = _cursor.getInt(_columnIndex);
-				//
-				_videosId[i] = id;
-				//
-				_cursor.moveToNext();
-				//
+		
+		for (File file : listOfFiles) {
+			if (file.isFile()) {
+				System.out.println("file name : "+file.getName());
+				namesOfFiles.add(file.getName());
 			}
-		} catch (Exception ex) {
-			
-			showToast(ex.getMessage().toString());
-			
 		}
+		System.out.println("size of file names list "+namesOfFiles.size());
+		adapter=new ArrayAdapter<String>(this,
+	            android.R.layout.simple_list_item_1,
+	            namesOfFiles);
+	
+	 
+	 ListView list= (ListView)findViewById(R.id.listView1);
+		list.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
+	 
+	 
+	 ListView l1 = (ListView)findViewById(R.id.listView1);
+	 l1.setOnItemClickListener(new OnItemClickListener(){
 
-	}
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Context context = getApplicationContext();
+				CharSequence text = "Hello toast! "+namesOfFiles.get(arg2);
+				int duration = Toast.LENGTH_SHORT;
 
-	protected void showToast(String msg) {
-		Toast.makeText(_context, msg, Toast.LENGTH_LONG).show();
-	}
-
-	//
-	private class VideoGalleryAdapter extends BaseAdapter {
-		public VideoGalleryAdapter(Context c) {
-			_context = c;
-		}
-
-		public int getCount() {
-			return _videosId.length;
-		}
-
-		public Object getItem(int position) {
-			return position;
-		}
-
-		public long getItemId(int position) {
-			return position;
-		}
-
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ImageView imgVw = new ImageView(_context);
-			;
-			try {
-				if (convertView != null) {
-					imgVw = (ImageView) convertView;
-				}
-				imgVw.setImageBitmap(getImage(_videosId[position]));
-				imgVw.setLayoutParams(new GridView.LayoutParams(200, 200));
-				imgVw.setPadding(8, 8, 8, 8);
-			} catch (Exception ex) {
-				System.out.println("MainActivity:getView()-135: ex "
-						+ ex.getClass() + ", " + ex.getMessage());
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
+				// Intent intent = new Intent(arg1.getContext(), Sub2.class);
+				//MainActivity.id=arg2;
+				 //intent.putExtra("id",arg2);
+				 //arg1.getContext().startActivity(intent);
+			//	System.out.println("the video to open "+uri+namesOfFiles.get(index));
+				
 			}
-			return imgVw;
-		}
+	      
 
-		// Create the thumbnail on the fly
-		private Bitmap getImage(int id) {
-			Bitmap thumb = MediaStore.Video.Thumbnails.getThumbnail(
-					getContentResolver(), id,
-					MediaStore.Video.Thumbnails.MICRO_KIND, null);
-			return thumb;
-		}
-
+	    });
 	}
 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.videos, menu);
+		
 		return true;
 	}
-
+	
+	/*public void openFolder()
+	{
+		
+		
+		
+	Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+	Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
+	    + "/DearDiary/Camera/");
+	System.out.println("uri is "+uri);
+	
+	
+	System.out.println("number of files in the folder "+listOfFiles.length);
+	
+	intent.setDataAndType(uri , "file/*");   
+	//intent.setDataAndType(uri, "text/csv");
+	startActivity(Intent.createChooser(intent, "Open folder2"));
+	}
+*/
+	
+	
+	
+	
 }
