@@ -31,17 +31,30 @@ public class Selector extends Activity {
     public static final int MEDIA_TYPE_VIDEO = 2;
  
     // directory name to store captured images and videos
-    private static final String IMAGE_DIRECTORY_NAME = "/Dear Diary/Camera/";
+    
+    
+    private static  String IMAGE_DIRECTORY_NAME = "/Dear Diary/Camera/";
+    private static  String VIDEO_DIRECTORY_NAME = "/Dear Diary/Camera/";
+    private static  String AUDIO_DIRECTORY_NAME = "/Dear Diary/Camera/";
+    
+    
  
     private Uri fileUri; // file url to store image/video
  
-   
+    boolean pressed = false;
+    String dateSelected;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selector);
+		Intent i = getIntent();
+	     dateSelected = i.getExtras().get("dateLine").toString();
+	    
+	    IMAGE_DIRECTORY_NAME = "/Dear Diary/"+dateSelected+"/Images/";
+	    VIDEO_DIRECTORY_NAME = "/Dear Diary/"+dateSelected+"/Video/";
+	    AUDIO_DIRECTORY_NAME = "/Dear Diary/"+dateSelected+"/Audio/";
 	}
 
 	@Override
@@ -65,16 +78,39 @@ public class Selector extends Activity {
 	public void notak(View v){
 			
 		Intent intent = new Intent(this,NoteTaking.class);
+		intent.putExtra("dateLine",dateSelected);
 		startActivity(intent);
 	}
 	
 	public void memo(View v){
 		
 		MediaRecorder recorder = new MediaRecorder(); 
-		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-		recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-		recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-		recorder.setOutputFile("/sdcard/mymemo.3gp");
+		  File AUDmediaStorageDir = new File(Environment.getExternalStorageDirectory().getPath()+AUDIO_DIRECTORY_NAME);
+		//fileAud.mkdir();
+		
+		
+		System.out.println("Can we write? " + AUDmediaStorageDir.canWrite());
+		if(!pressed){
+			
+			
+			if (!AUDmediaStorageDir.exists()) {
+	            if (!AUDmediaStorageDir.mkdirs()) {
+	                Log.d(IMAGE_DIRECTORY_NAME, "Oops! Failed create "
+	                        + IMAGE_DIRECTORY_NAME + " directory");
+	                
+	            }
+	        }
+			
+			int aVal = (int) ((float) (Math.random())*1000);
+			System.out.println("Random: " + aVal);
+			
+			recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+			recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+			recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+			recorder.setOutputFile(Environment.getExternalStorageDirectory().getPath()+AUDIO_DIRECTORY_NAME+"AudioFile#"+aVal+".mp3");
+			System.out.println("Audio Storage Location: "+Environment.getExternalStorageDirectory().getPath()+AUDIO_DIRECTORY_NAME+"AduioFile#"+aVal);
+			pressed = true;
+		
 
 		
 
@@ -85,6 +121,12 @@ public class Selector extends Activity {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		}else{
+			
+			recorder.reset();
+			recorder.release();
+			pressed = false;
 		}
 	}
 	
@@ -253,11 +295,21 @@ public class Selector extends Activity {
 	    private static File getOutputMediaFile(int type) {
 	 
 	        // External sdcard location
-	        File mediaStorageDir = new File(Environment.getExternalStorageDirectory().getPath()+IMAGE_DIRECTORY_NAME);
+	        File IMGmediaStorageDir = new File(Environment.getExternalStorageDirectory().getPath()+IMAGE_DIRECTORY_NAME);
+	        File VIDmediaStorageDir = new File(Environment.getExternalStorageDirectory().getPath()+VIDEO_DIRECTORY_NAME);
+	   //   File AUDmediaStorageDir = new File(Environment.getExternalStorageDirectory().getPath()+AUDIO_DIRECTORY_NAME);
 	 
 	        // Create the storage directory if it does not exist
-	        if (!mediaStorageDir.exists()) {
-	            if (!mediaStorageDir.mkdirs()) {
+	        if (!VIDmediaStorageDir.exists()) {
+	            if (!VIDmediaStorageDir.mkdirs()) {
+	                Log.d(VIDEO_DIRECTORY_NAME, "Oops! Failed create "
+	                        + VIDEO_DIRECTORY_NAME + " directory");
+	                return null;
+	            }
+	        }
+	        
+	        if (!IMGmediaStorageDir.exists()) {
+	            if (!IMGmediaStorageDir.mkdirs()) {
 	                Log.d(IMAGE_DIRECTORY_NAME, "Oops! Failed create "
 	                        + IMAGE_DIRECTORY_NAME + " directory");
 	                return null;
@@ -269,10 +321,10 @@ public class Selector extends Activity {
 	                Locale.getDefault()).format(new Date());
 	        File mediaFile;
 	        if (type == MEDIA_TYPE_IMAGE) {
-	            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+	            mediaFile = new File(IMGmediaStorageDir.getPath() + File.separator
 	                    + "IMG_" + timeStamp + ".jpg");
 	        } else if (type == MEDIA_TYPE_VIDEO) {
-	            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+	            mediaFile = new File(VIDmediaStorageDir.getPath() + File.separator
 	                    + "VID_" + timeStamp + ".mp4");
 	        } else {
 	            return null;

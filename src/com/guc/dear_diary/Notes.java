@@ -3,6 +3,7 @@ package com.guc.dear_diary;
 import com.guc.dear_diary.SaverSQL.FeedEntry;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 
@@ -31,50 +32,53 @@ public class Notes extends Activity {
 	ArrayAdapter<String> adapter;
 	boolean firstTime=true;
 	static int count =-1;
+	String dateSelected;
 	SaverSQL mDbHelper = new SaverSQL(this); //Getbase Context di el mafrood teb2a get context bas eshta
 	ContentValues values = new ContentValues();
+	
+	//TODO The Third Column (DATE) has the Date of the day the entry was written on. The dateSelected string is set to the date the user selected. Check both are equal before dispalying.
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
 		setContentView(R.layout.activity_notes);
+		Intent i = getIntent();
+	    dateSelected = i.getExtras().get("dateLine").toString();
+		
 		readFromDatabase();
-		 adapter=new ArrayAdapter<String>(this,
+		adapter=new ArrayAdapter<String>(this,
 		            android.R.layout.simple_list_item_1,
 		            name);
 		
 		 
-		 ListView list= (ListView)findViewById(R.id.listView1);
-		 Log.e("Works here","Yep");
-			list.setAdapter(adapter);
-			Log.e("Still wokrs?","Yep");
-			adapter.notifyDataSetChanged();
+		ListView list= (ListView)findViewById(R.id.listView1);
+		list.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
 			
 
-			 ListView l1 = (ListView)findViewById(R.id.listView1);
-			 l1.setOnItemClickListener(new OnItemClickListener(){
+		 ListView l1 = (ListView)findViewById(R.id.listView1);
+		 l1.setOnItemClickListener(new OnItemClickListener(){
 			
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				Context context = getApplicationContext();
-				CharSequence text = "Hello toast! "+name.get(arg2);
-				int duration = Toast.LENGTH_SHORT;
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			Context context = getApplicationContext();
+			CharSequence text = "Hello toast! "+name.get(arg2);
+			int duration = Toast.LENGTH_SHORT;
 
-				Toast toast = Toast.makeText(context, text, duration);
-				toast.show();
-				 Intent intent = new Intent(arg1.getContext(), NoteItself.class);
-				Notes.id=arg2;
-				 intent.putExtra("id",arg2);
-				 arg1.getContext().startActivity(intent);
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+			 Intent intent = new Intent(arg1.getContext(), NoteItself.class);
+			Notes.id=arg2;
+			 intent.putExtra("id",arg2);
+			 intent.putExtra("dateLine", dateSelected);
+			 arg1.getContext().startActivity(intent);
 				
-			}
+		}
 	      
 
-	    });   
+	   });   
 		
-		count++;
+	count++;
 	}
 	
 	public void onStart(){
@@ -129,9 +133,11 @@ public class Notes extends Activity {
 		 c.moveToFirst();
 		for(int i=0;i<c.getCount();i++){
 		
+		if(dateSelected.equals(c.getString(c.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_DATE)))){
 		name.add(c.getString(c.getColumnIndexOrThrow(mDbHelper.COLUMN_NAME_TITLE)));
 		description.add(c.getString(c.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_DESC)));
 		date.add(c.getString(c.getColumnIndexOrThrow(FeedEntry.COLUMN_NAME_DATE)));
+		}
 		c.moveToNext();
 		}
 		

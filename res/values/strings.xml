@@ -16,5 +16,6 @@
     <string name="title_activity_note_taking">NoteTaking</string>
     <string name="title_activity_note_itself">NoteItself</string>
     <string name="title_activity_recording">Recording</string>
+    <string name="title_activity_calendar">Calendar</string>
 
 </resources>

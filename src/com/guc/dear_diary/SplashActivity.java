@@ -40,7 +40,7 @@ public class SplashActivity extends Activity {
             }
             
             // Start main activity
-          	Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+          	Intent intent = new Intent(SplashActivity.this, Calendar.class);
           	SplashActivity.this.startActivity(intent);
           	SplashActivity.this.finish();
     	}

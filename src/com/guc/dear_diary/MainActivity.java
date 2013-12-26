@@ -1,6 +1,7 @@
 package com.guc.dear_diary;
 
 
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -22,10 +23,18 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 public class MainActivity extends Activity  /* implements OnInitListener */{
  //   private TextToSpeech tts;
     public static String URLL;
+    String datee;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        Intent i = getIntent();
+        System.out.println("The Date is (On the other side): " + i.getExtras().get("dateLine").toString());
+        datee=i.getExtras().get("dateLine").toString();
+    
+        
   //      tts = new TextToSpeech(this, this);
      //   findViewById(R.id.button1).setOnClickListener(this);
     }
@@ -39,6 +48,7 @@ public class MainActivity extends Activity  /* implements OnInitListener */{
     public void newEnt(View V){
     
     	Intent intent = new Intent(this, Selector.class);
+    	intent.putExtra("dateLine",datee);
     	startActivity(intent);
     	
     }
@@ -46,6 +56,7 @@ public class MainActivity extends Activity  /* implements OnInitListener */{
     public void toAud(View V){
         
     	Intent intent = new Intent(this, Sounds.class);
+    	intent.putExtra("dateLine",datee);
     	startActivity(intent);
     	
     }
@@ -53,6 +64,7 @@ public class MainActivity extends Activity  /* implements OnInitListener */{
     public void toVid(View V){
         
     	Intent intent = new Intent(this, Videos.class);
+    	intent.putExtra("dateLine",datee);
     	startActivity(intent);
     	
     }
@@ -60,6 +72,7 @@ public class MainActivity extends Activity  /* implements OnInitListener */{
     public void toImg(View V){
         
     	Intent intent = new Intent(this, Images.class);
+    	intent.putExtra("dateLine",datee);
     	startActivity(intent);
     	
     }
@@ -67,6 +80,7 @@ public class MainActivity extends Activity  /* implements OnInitListener */{
     public void toNot(View V){
         
     	Intent intent = new Intent(this, Notes.class);
+    	intent.putExtra("dateLine",datee);
     	startActivity(intent);
     	
     }

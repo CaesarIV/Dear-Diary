@@ -20,11 +20,15 @@ public class NoteTaking extends Activity {
 	public final static String MESSAGE3 = "com.example.myfirstapp.MESSAGE";
 	public final static int number = 0;
 	SaverSQL mDbHelper = new SaverSQL(this);
+	String dateSelected;
 	ContentValues values = new ContentValues();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_note_taking);
+		
+		Intent i = getIntent();
+	     dateSelected = i.getExtras().get("dateLine").toString();
 	}
 
 	@Override
@@ -54,7 +58,7 @@ public class NoteTaking extends Activity {
 		Notes.date.add(message3);
 		values.put(mDbHelper.COLUMN_NAME_TITLE, message);
 		values.put(mDbHelper.COLUMN_NAME_DESC, message2);
-		values.put(mDbHelper.COLUMN_NAME_DATE, message3);
+		values.put(mDbHelper.COLUMN_NAME_DATE, dateSelected);
 		SQLiteDatabase db = mDbHelper.getWritableDatabase();
 		long newRowId; 
 		newRowId = db.insert( mDbHelper.TABLE_NAME,null, values);
@@ -74,6 +78,7 @@ public class NoteTaking extends Activity {
 		 * Log.e("Message 1",message); Log.e("Message 2",message2); //
 		 * Log.e("Message 3",message);
 		 */
+		intent.putExtra("dateLine", dateSelected);
 		startActivity(intent);
 
 	}
