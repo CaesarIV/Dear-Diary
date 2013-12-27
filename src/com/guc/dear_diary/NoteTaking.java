@@ -45,17 +45,15 @@ public class NoteTaking extends Activity {
 		String message = editText.getText().toString();
 		EditText editText2 = (EditText) findViewById(R.id.editText2);
 		String message2 = editText2.getText().toString();
-		DatePicker editText3 = (DatePicker) findViewById(R.id.datePicker1);
-		int day = editText3.getDayOfMonth();
-		int month = editText3.getMonth() + 1;
-		int year = editText3.getYear();
-		String message3 = day + " " + month + " " + year;
+	
+	
+	
 		intent.putExtra(MESSAGE1, message);
 		intent.putExtra(MESSAGE2, message2);
-		intent.putExtra(MESSAGE3, message3);
+		intent.putExtra(MESSAGE3, dateSelected);
 		Notes.name.add(message);
 		Notes.description.add(message2);
-		Notes.date.add(message3);
+		Notes.date.add(dateSelected);
 		values.put(mDbHelper.COLUMN_NAME_TITLE, message);
 		values.put(mDbHelper.COLUMN_NAME_DESC, message2);
 		values.put(mDbHelper.COLUMN_NAME_DATE, dateSelected);

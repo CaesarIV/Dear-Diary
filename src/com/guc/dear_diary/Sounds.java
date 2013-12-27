@@ -3,6 +3,7 @@ package com.guc.dear_diary;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -93,11 +94,24 @@ public class Sounds extends Activity {
 
                                 Toast toast = Toast.makeText(context, text, duration);
                                 toast.show();
-                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);                                                                                            
                                 Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
-                                        + "/Dear Diary/"+dateSelected+"/Video/"+l1.getItemAtPosition(arg2));                                   
-                                intent.setDataAndType(uri , "audio/mp3");   
-                                startActivity(Intent.createChooser(intent, "Open Audio File"));
+                                        + "/Dear Diary/"+dateSelected+"/Audio/"+l1.getItemAtPosition(arg2));    
+                                String Urri = uri.toString();
+                                MediaPlayer mp = new MediaPlayer();
+
+                                try {
+                                    mp.setDataSource(Urri);
+                                    mp.prepare();
+                                    mp.start();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                        //        Intent intent = new Intent(Intent.ACTION_VIEW);                                                                                            
+                                                              
+                       //         intent.setDataAndType(uri , "audio/*");
+                                System.out
+										.println("The URI ---------> " + Urri);
+                       //         startActivity(intent);
                         //        System.out.println("the video to open "+uri+namesOfFiles.get(index));
                                 
                         }

@@ -91,13 +91,14 @@ public class Videos extends Activity {
                                 Context context = getApplicationContext();
                                 CharSequence text = "Hello toast! "+namesOfFiles.get(arg2);
                                 int duration = Toast.LENGTH_SHORT;
-                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);                                                                                            
-                                Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
+                                Intent intent = new Intent(Intent.ACTION_VIEW);                                                                                            
+                                Uri uri = Uri.parse("file://"+Environment.getExternalStorageDirectory().getPath()
                                         + "/Dear Diary/"+dateSelected+"/Video/"+l1.getItemAtPosition(arg2));                                   
                                 intent.setDataAndType(uri , "video/*");   
                                 startActivity(Intent.createChooser(intent, "Open Video"));
                                 Toast toast = Toast.makeText(context, text, duration);
                                 toast.show();
+                                System.out.println("URI -----------> "+uri.toString());
                                 // Intent intent = new Intent(arg1.getContext(), Sub2.class);
                                 //MainActivity.id=arg2;
                                  //intent.putExtra("id",arg2);

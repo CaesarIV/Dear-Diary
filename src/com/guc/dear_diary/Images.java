@@ -96,8 +96,8 @@ public class Images extends Activity {
 				
 				                                Toast toast = Toast.makeText(context, text, duration);
 				                                toast.show();
-				                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);                                                                                            
-				                                Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
+				                                Intent intent = new Intent(Intent.ACTION_VIEW);                                                                                            
+				                                Uri uri = Uri.parse("file://"+Environment.getExternalStorageDirectory().getPath()
 				                                        + "/Dear Diary/"+dateSelected+"/Images/"+l1.getItemAtPosition(arg2));                                   
 				                                intent.setDataAndType(uri , "image/*");
 				                                System.out
@@ -106,6 +106,8 @@ public class Images extends Activity {
 				                                startActivity(intent);
 				                                
 				                        //        System.out.println("the video to open "+uri+namesOfFiles.get(index));
+				                                
+				                              
 				                                
 				                        }
 				              
