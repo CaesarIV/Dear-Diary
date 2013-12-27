@@ -23,6 +23,18 @@ public class NoteItself extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_note_itself);
+		
+		 int id=Notes.id;
+		 
+			TextView textView1 = (TextView) findViewById(R.id.textView1);
+			TextView textView2 = (TextView) findViewById(R.id.textView2);
+			TextView textView3 = (TextView) findViewById(R.id.textView3);
+			
+			System.out.println("Name: "+Notes.name.get(id));
+			
+			textView1.setText(Notes.name.get(id));
+			textView2.setText(Notes.description.get(id));
+			textView3.setText(Notes.date.get(id));
 	}
 
 	@Override
@@ -31,15 +43,7 @@ public class NoteItself extends Activity {
 		getMenuInflater().inflate(R.menu.note_itself, menu);
 		
 
-		 int id=Notes.id;
-		 
-		TextView editText1 = (TextView) findViewById(R.id.textView1);
-		TextView editText2 = (TextView) findViewById(R.id.textView2);
-		TextView editText3 = (TextView) findViewById(R.id.textView3);
 		
-		 editText1.setText(Notes.name.get(id));
-		 editText2.setText(Notes.description.get(id));
-		 editText3.setText(Notes.date.get(id));
 	
 		
 		return true;
