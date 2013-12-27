@@ -98,8 +98,11 @@
         <activity
             android:name="com.guc.dear_diary.Calendar"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            
             android:label="@string/title_activity_calendar" >
+        </activity>
+        <activity
+            android:name="com.guc.dear_diary.Sync"
+            android:label="@string/title_activity_sync" >
         </activity>
     </application>
 

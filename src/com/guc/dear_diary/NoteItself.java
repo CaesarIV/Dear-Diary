@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +29,13 @@ public class NoteItself extends Activity {
 		 
 			TextView textView1 = (TextView) findViewById(R.id.textView1);
 			TextView textView2 = (TextView) findViewById(R.id.textView2);
-			TextView textView3 = (TextView) findViewById(R.id.textView3);
+			
 			
 			System.out.println("Name: "+Notes.name.get(id));
 			
 			textView1.setText(Notes.name.get(id));
 			textView2.setText(Notes.description.get(id));
-			textView3.setText(Notes.date.get(id));
+			//textView3.setText(Notes.date.get(id));
 	}
 
 	@Override
@@ -78,6 +79,18 @@ public void deletetask(View v){
 	    	  Toast.LENGTH_SHORT).show();
 	    	  }
 		
+	}
+	
+public void Gsync (View v){
+		
+		int id=Notes.id;
+		
+		TextView textView1 = (TextView) findViewById(R.id.textView1);
+		String message = textView1.getText().toString();
+		Intent i = new Intent(this,Sync.class);
+		i.putExtra("dateLine", Notes.date.get(id));
+		i.putExtra("message", message);
+		startActivity(i);
 	}
 	
 	 public void readIt(View v){

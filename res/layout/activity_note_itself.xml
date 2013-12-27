@@ -15,8 +15,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="102dp"
-        android:onClick="deletetask"
-        android:text="Done with Task!" />
+        android:onClick="Gsync"
+        android:text="Sync to Google!" />
 
     <TextView
         android:id="@+id/textView1"
@@ -27,16 +27,6 @@
         android:layout_marginTop="15dp"
         android:text="Task Name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="52dp"
-        android:text="Date"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/textView2"

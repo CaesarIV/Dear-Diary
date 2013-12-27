@@ -80,5 +80,36 @@ public class NoteTaking extends Activity {
 		startActivity(intent);
 
 	}
+	
+	public void Gsync (View v){
+		
+		
+		EditText editText = (EditText) findViewById(R.id.editText1);
+		String message = editText.getText().toString();
+		
+		Intent i = new Intent(this,Sync.class);
+		
+		EditText editText2 = (EditText) findViewById(R.id.editText2);
+		String message2 = editText2.getText().toString();
+	
+	
+	
+		i.putExtra(MESSAGE1, message);
+		i.putExtra(MESSAGE2, message2);
+		i.putExtra(MESSAGE3, dateSelected);
+		Notes.name.add(message);
+		Notes.description.add(message2);
+		Notes.date.add(dateSelected);
+		values.put(mDbHelper.COLUMN_NAME_TITLE, message);
+		values.put(mDbHelper.COLUMN_NAME_DESC, message2);
+		values.put(mDbHelper.COLUMN_NAME_DATE, dateSelected);
+		SQLiteDatabase db = mDbHelper.getWritableDatabase();
+		long newRowId; 
+		newRowId = db.insert( mDbHelper.TABLE_NAME,null, values);
+		
+		i.putExtra("dateLine", dateSelected);
+		i.putExtra("message", message);
+		startActivity(i);
+	}
 
 }
