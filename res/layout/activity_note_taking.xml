@@ -51,6 +51,6 @@
         android:layout_alignLeft="@+id/editText2"
         android:layout_alignRight="@+id/editText2"
         android:onClick="Gsync"
-        android:text="Sync with Google" />
+        android:text="Post To Facebook!" />
 
 </RelativeLayout>
