@@ -83,7 +83,8 @@ public class Selector extends Activity {
 	}
 	
 	public void memo(View v){
-		
+		Button b = (Button)findViewById(R.id.button3);
+		b.setText("Recording!");
 		MediaRecorder recorder = new MediaRecorder(); 
 		  File AUDmediaStorageDir = new File(Environment.getExternalStorageDirectory().getPath()+AUDIO_DIRECTORY_NAME);
 		//fileAud.mkdir();
@@ -123,7 +124,7 @@ public class Selector extends Activity {
 			e.printStackTrace();
 		}
 		}else{
-			
+			b.setText("Ready!");
 			recorder.reset();
 			recorder.release();
 			pressed = false;

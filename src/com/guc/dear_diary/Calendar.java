@@ -80,10 +80,8 @@ public class Calendar extends Activity {
 			    	startActivity(intent);
 				}
 				
-				else{
-					  Toast.makeText(getApplicationContext(),
-		                        "U know the future ?!? u should be a psycic", Toast.LENGTH_SHORT)
-		                        .show();
+				else if(selectedDate.after(today)){
+					
 				}
                                         
             }

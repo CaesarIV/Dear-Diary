@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="102dp"
         android:onClick="Gsync"
-        android:text="Sync to Google!" />
+        android:text="Post to Facebook!" />
 
     <TextView
         android:id="@+id/textView1"
